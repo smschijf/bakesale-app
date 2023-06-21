@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 
 import { priceDisplay } from '../util';
 
-const DealItem = (props) => {
+const DealDetail = (props) => {
   return (
     <View style={styles.deal}>
       <Image source={{ uri: props.deal.media[0] }} style={styles.image} />
@@ -11,6 +11,7 @@ const DealItem = (props) => {
         <Text>{priceDisplay(props.deal.price)}</Text>
         <Text>{props.deal.cause.name}</Text>
       </View>
+      <Text>...</Text>
     </View>
   );
 };
@@ -38,4 +39,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DealItem;
+export default DealDetail;
