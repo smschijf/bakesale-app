@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
+
+import DealItem from './DealItem';
 
 const DealList = (props) => {
   return (
     <View style={styles.list}>
       <FlatList
         data={props.deals}
-        renderItem={({ item }) => <Text>{item.title}</Text>}
+        renderItem={({ item }) => <DealItem deal={item} />}
         keyExtractor={(item) => item.key}
       />
     </View>
