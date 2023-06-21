@@ -1,17 +1,21 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-import { priceDisplay } from '../util';
+import { priceDisplay } from "../util";
 
 const DealItem = (props) => {
+  const handlePress = () => {
+    props.onPress(props.deal.key);
+  };
+
   return (
-    <View style={styles.deal}>
+    <TouchableOpacity style={styles.deal} onPress={handlePress}>
       <Image source={{ uri: props.deal.media[0] }} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{props.deal.title}</Text>
         <Text>{priceDisplay(props.deal.price)}</Text>
         <Text>{props.deal.cause.name}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -26,16 +30,16 @@ const styles = StyleSheet.create({
   },
   info: {
     padding: 10,
-    backgroundColor: '#fff',
-    borderColor: '#bbb',
+    backgroundColor: "#fff",
+    borderColor: "#bbb",
     borderWidth: 2,
     borderTopWidth: 0,
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
-  }
+  },
 });
 
 export default DealItem;

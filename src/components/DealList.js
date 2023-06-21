@@ -7,7 +7,7 @@ const DealList = (props) => {
     <View style={styles.list}>
       <FlatList
         data={props.deals}
-        renderItem={({ item }) => <DealItem deal={item} />}
+        renderItem={({ item }) => <DealItem deal={item} onPress={props.onItemPress} />}
         keyExtractor={(item) => item.key}
       />
     </View>

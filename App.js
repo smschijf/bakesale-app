@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 
 import fetchInitialDeals from "./src/ajax";
 import DealList from "./src/components/DealList";
+import DealDetail from "./src/components/DealDetail";
 
 const App = () => {
   const [deals, setDeals] = useState([]);
-  
+  const [currentDealId, setCurrentDeal] = useState();
+
   useEffect(() => {
     const fetchData = async () => {
       const fetchedDeals = await fetchInitialDeals();
@@ -15,15 +17,22 @@ const App = () => {
     };
 
     fetchData();
+    setCurrentDeal(currentDealId);
   }, []);
 
+  const currentDeal = () => {
+    return deals.find((deal) => deal.key === currentDealId);
+  };
+
+  if (currentDealId) {
+    return <DealDetail deal={currentDeal()} />;
+  }
+  if (deals.length > 0) {
+    return <DealList deals={deals} onItemPress={setCurrentDeal} />;
+  }
   return (
     <SafeAreaView style={styles.container}>
-      {deals.length > 0 ? (
-        <DealList deals={deals} />
-      ) : (
-        <Text style={styles.header}>Bakesale</Text>
-      )}
+      <Text style={styles.header}>Bakesale</Text>
       <StatusBar style="auto" />
     </SafeAreaView>
   );

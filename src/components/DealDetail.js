@@ -1,10 +1,10 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, SafeAreaView } from "react-native";
 
 import { priceDisplay } from '../util';
 
 const DealDetail = (props) => {
   return (
-    <View style={styles.deal}>
+    <SafeAreaView style={styles.deal}>
       <Image source={{ uri: props.deal.media[0] }} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{props.deal.title}</Text>
@@ -12,7 +12,7 @@ const DealDetail = (props) => {
         <Text>{props.deal.cause.name}</Text>
       </View>
       <Text>...</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
     marginTop: 12,
+    width: '100%',
+    flex: 1,
+    backgroundColor: "#fff",
   },
   info: {
     padding: 10,
