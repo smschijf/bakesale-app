@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 
-import fetchInitialDeals from "./src/ajax";
+import { fetchInitialDeals } from "./src/ajax";
 import DealList from "./src/components/DealList";
 import DealDetail from "./src/components/DealDetail";
 
@@ -25,7 +25,7 @@ const App = () => {
   };
 
   if (currentDealId) {
-    return <DealDetail deal={currentDeal()} />;
+    return <DealDetail initialDealData={currentDeal()} />;
   }
   if (deals.length > 0) {
     return <DealList deals={deals} onItemPress={setCurrentDeal} />;

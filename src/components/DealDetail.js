@@ -1,17 +1,44 @@
 import { StyleSheet, View, Text, Image, SafeAreaView } from "react-native";
+import { useState, useEffect } from "react";
 
-import { priceDisplay } from '../util';
+import { priceDisplay } from "../util";
+import { fetchDealDetail } from "../ajax";
 
 const DealDetail = (props) => {
+  const [deal, setDeal] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fullDeal = await fetchDealDetail(props.initialDealData.key);
+      console.log(fullDeal);
+      setDeal(fullDeal);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.deal}>
-      <Image source={{ uri: props.deal.media[0] }} style={styles.image} />
+      <Image
+        source={{ uri: props.initialDealData.media[0] }}
+        style={styles.image}
+      />
       <View style={styles.info}>
-        <Text style={styles.title}>{props.deal.title}</Text>
-        <Text>{priceDisplay(props.deal.price)}</Text>
-        <Text>{props.deal.cause.name}</Text>
+        <Text style={styles.title}>{props.initialDealData.title}</Text>
+        <Text>{priceDisplay(props.initialDealData.price)}</Text>
+        <Text>{props.initialDealData.cause.name}</Text>
       </View>
-      <Text>...</Text>
+      {deal && deal.user && (
+        <>
+          <View>
+            <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
+            <Text>{deal.user.name}</Text>
+          </View>
+          <View>
+            <Text>{deal.description}</Text>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -24,22 +51,26 @@ const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
     marginTop: 12,
-    width: '100%',
+    width: "100%",
     flex: 1,
     backgroundColor: "#fff",
   },
   info: {
     padding: 10,
-    backgroundColor: '#fff',
-    borderColor: '#bbb',
+    backgroundColor: "#fff",
+    borderColor: "#bbb",
     borderWidth: 2,
     borderTopWidth: 0,
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
-  }
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+  },
 });
 
 export default DealDetail;
