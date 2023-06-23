@@ -1,14 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 
-import { fetchInitialDeals } from "./src/ajax";
+import { fetchInitialDeals, fetchDealsSearchResults } from "./src/ajax";
 import DealList from "./src/components/DealList";
 import DealDetail from "./src/components/DealDetail";
+import SearchBar from "./src/components/SearchBar";
 
 const App = () => {
   const [deals, setDeals] = useState([]);
   const [currentDealId, setCurrentDeal] = useState();
+  const [dealsFromSearch, setdealsFromSearch] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,15 +26,35 @@ const App = () => {
     setCurrentDeal(null);
   };
 
+  const searchDeals = async (searchTerm) => {
+    if (searchTerm) {
+      const dealsFromSearch = await fetchDealsSearchResults(searchTerm);
+      setdealsFromSearch(dealsFromSearch);
+    } else {
+      setdealsFromSearch([]);
+    }
+  };
+  const clearSearch = () => {
+    setdealsFromSearch([]);
+  };
+
   const currentDeal = () => {
     return deals.find((deal) => deal.key === currentDealId);
   };
 
   if (currentDealId) {
-    return <DealDetail initialDealData={currentDeal()} onBack={unsetCurrentDeal} />;
+    return (
+      <DealDetail initialDealData={currentDeal()} onBack={unsetCurrentDeal} />
+    );
   }
-  if (deals.length > 0) {
-    return <DealList deals={deals} onItemPress={setCurrentDeal} />;
+  const dealsToDisplay = dealsFromSearch.length > 0 ? dealsFromSearch : deals;
+  if (dealsToDisplay.length > 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <SearchBar searchDeals={searchDeals} />
+        <DealList deals={dealsToDisplay} onItemPress={setCurrentDeal} />
+      </SafeAreaView>
+    );
   }
   return (
     <SafeAreaView style={styles.container}>

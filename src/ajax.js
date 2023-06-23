@@ -23,3 +23,16 @@ export const fetchDealDetail = async (dealId) => {
     console.error(error);
   }
 };
+
+export const fetchDealsSearchResults = async (searchTerm) => {
+  const apiHost = "https://bakesaleforgood.com";
+
+  try {
+    const response = await fetch(apiHost + "/api/deals?searchTerm=" + searchTerm);
+    const json = await response.json();
+    console.log(json);
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+};
