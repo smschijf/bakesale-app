@@ -25,20 +25,24 @@ const DealDetail = (props) => {
       />
       <View style={styles.info}>
         <Text style={styles.title}>{props.initialDealData.title}</Text>
-        <Text>{priceDisplay(props.initialDealData.price)}</Text>
-        <Text>{props.initialDealData.cause.name}</Text>
+        <View>
+          <Text style={styles.price}>
+            {priceDisplay(props.initialDealData.price)}
+          </Text>
+          <Text style={styles.cause}>{props.initialDealData.cause.name}</Text>
+        </View>
+        {deal && deal.user && (
+          <>
+            <View style={styles.userInfo}>
+              <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
+              <Text>{deal.user.name}</Text>
+            </View>
+            <View style={styles.description}>
+              <Text>{deal.description}</Text>
+            </View>
+          </>
+        )}
       </View>
-      {deal && deal.user && (
-        <>
-          <View>
-            <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
-            <Text>{deal.user.name}</Text>
-          </View>
-          <View>
-            <Text>{deal.description}</Text>
-          </View>
-        </>
-      )}
     </SafeAreaView>
   );
 };
@@ -66,10 +70,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+    backgroundColor: "#fad3a6",
+  },
+  price: {
+    fontWeight: "bold",
+    paddingLeft: "10%",
+  },
+  cause: {
+    paddingLeft: "10%",
   },
   avatar: {
     width: 60,
     height: 60,
+  },
+  userInfo: {
+    borderBottomColor: "#bbb",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  description: {
+    paddingTop: 10,
   },
 });
 
