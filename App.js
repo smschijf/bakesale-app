@@ -20,12 +20,16 @@ const App = () => {
     setCurrentDeal(currentDealId);
   }, []);
 
+  const unsetCurrentDeal = () => {
+    setCurrentDeal(null);
+  };
+
   const currentDeal = () => {
     return deals.find((deal) => deal.key === currentDealId);
   };
 
   if (currentDealId) {
-    return <DealDetail initialDealData={currentDeal()} />;
+    return <DealDetail initialDealData={currentDeal()} onBack={unsetCurrentDeal} />;
   }
   if (deals.length > 0) {
     return <DealList deals={deals} onItemPress={setCurrentDeal} />;

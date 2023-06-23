@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image, SafeAreaView } from "react-native";
+import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 
 import { priceDisplay } from "../util";
@@ -19,6 +19,9 @@ const DealDetail = (props) => {
 
   return (
     <SafeAreaView style={styles.deal}>
+      <TouchableOpacity onPress={props.onBack}>
+        <Text style={styles.backLink}>Back</Text>
+      </TouchableOpacity>
       <Image
         source={{ uri: props.initialDealData.media[0] }}
         style={styles.image}
@@ -90,6 +93,10 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingTop: 10,
+  },
+  backLink: {
+    marginBottom: 10,
+    color: "#22f"
   },
 });
 
