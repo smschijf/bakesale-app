@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   PanResponder,
   Animated,
+  Dimensions,
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -14,14 +15,24 @@ import { priceDisplay } from "../util";
 import { fetchDealDetail } from "../ajax";
 
 const DealDetail = (props) => {
+  const imageXPos = new Animated.Value(0);
+
   const imagePanResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (evt, gs) => {
-      console.log("MOVING");
+      imageXPos.setValue(gs.dx);
     },
     onPanResponderRelease: (evt, gs) => {
-      console.log("RELEASED");
-    }
+      const width = Dimensions.get("window").width;
+      if (Math.abs(gs.dx) > width * 0.4) {
+        const direction = Math.sign(gs.dx)
+        // -1 for left, 1 for right
+        Animated.timing(imageXPos, {
+          toValue: direction * width,
+          duration: 250,
+        }).start();
+      }
+    },
   });
 
   const [deal, setDeal] = useState();
@@ -42,10 +53,10 @@ const DealDetail = (props) => {
       <TouchableOpacity onPress={props.onBack}>
         <Text style={styles.backLink}>Back</Text>
       </TouchableOpacity>
-      <Image
+      <Animated.Image
         {...imagePanResponder.panHandlers}
         source={{ uri: props.initialDealData.media[imageIndex] }}
-        style={styles.image}
+        style={[{ left: imageXPos }, styles.image]}
       />
       <View style={styles.info}>
         <Text style={styles.title}>{props.initialDealData.title}</Text>
