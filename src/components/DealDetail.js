@@ -30,6 +30,7 @@ const DealDetail = (props) => {
         Animated.timing(imageXPos, {
           toValue: direction * width,
           duration: 250,
+          useNativeDriver: false
         }).start();
       }
     },

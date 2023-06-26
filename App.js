@@ -27,6 +27,7 @@ const App = () => {
       toValue: direction * (width / 2),
       duration: 1000,
       easing: Easing.ease,
+      useNativeDriver: false
     }).start(({ finished }) => {
       if (finished) {
         animateTitle(-1 * direction);
