@@ -1,11 +1,31 @@
-import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  PanResponder,
+  Animated,
+} from "react-native";
 import { useState, useEffect } from "react";
 
 import { priceDisplay } from "../util";
 import { fetchDealDetail } from "../ajax";
 
 const DealDetail = (props) => {
+  const imagePanResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (evt, gs) => {
+      console.log("MOVING");
+    },
+    onPanResponderRelease: (evt, gs) => {
+      console.log("RELEASED");
+    }
+  });
+
   const [deal, setDeal] = useState();
+  const [imageIndex, setImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +43,8 @@ const DealDetail = (props) => {
         <Text style={styles.backLink}>Back</Text>
       </TouchableOpacity>
       <Image
-        source={{ uri: props.initialDealData.media[0] }}
+        {...imagePanResponder.panHandlers}
+        source={{ uri: props.initialDealData.media[imageIndex] }}
         style={styles.image}
       />
       <View style={styles.info}>
@@ -95,7 +116,7 @@ const styles = StyleSheet.create({
   },
   backLink: {
     marginBottom: 10,
-    color: "#22f"
+    color: "#22f",
   },
 });
 
