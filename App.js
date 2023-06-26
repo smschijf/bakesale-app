@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Animated,
+  Easing,
+  Dimensions,
+} from "react-native";
 import { useState, useEffect } from "react";
 
 import { fetchInitialDeals, fetchDealsSearchResults } from "./src/ajax";
@@ -8,11 +15,28 @@ import DealDetail from "./src/components/DealDetail";
 import SearchBar from "./src/components/SearchBar";
 
 const App = () => {
+  const titleXPos = new Animated.Value(0);
+
   const [deals, setDeals] = useState([]);
   const [currentDealId, setCurrentDeal] = useState();
   const [dealsFromSearch, setdealsFromSearch] = useState([]);
 
+  const animateTitle = (direction = 1) => {
+    const width = Dimensions.get("window").width - 150;
+    Animated.timing(titleXPos, {
+      toValue: direction * (width / 2),
+      duration: 1000,
+      easing: Easing.ease,
+    }).start(({ finished }) => {
+      if (finished) {
+        animateTitle(-1 * direction);
+      }
+    });
+  };
+
   useEffect(() => {
+    animateTitle();
+
     const fetchData = async () => {
       const fetchedDeals = await fetchInitialDeals();
       setDeals(fetchedDeals);
@@ -57,10 +81,10 @@ const App = () => {
     );
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <Animated.View style={[{ left: titleXPos }, styles.container]}>
       <Text style={styles.header}>Bakesale</Text>
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </Animated.View>
   );
 };
 

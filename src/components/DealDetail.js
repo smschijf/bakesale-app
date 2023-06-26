@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     height: 150,
   },
   deal: {
-    marginHorizontal: 12,
     marginTop: 12,
     width: "100%",
     flex: 1,
@@ -65,9 +64,9 @@ const styles = StyleSheet.create({
   info: {
     padding: 10,
     backgroundColor: "#fff",
-    borderColor: "#bbb",
-    borderWidth: 2,
-    borderTopWidth: 0,
+    // borderColor: "#bbb",
+    // borderWidth: 2,
+    // borderTopWidth: 0,
   },
   title: {
     fontSize: 16,
