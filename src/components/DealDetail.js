@@ -8,6 +8,8 @@ import {
   PanResponder,
   Animated,
   Dimensions,
+  Button,
+  Linking,
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -16,6 +18,7 @@ import { fetchDealDetail } from "../ajax";
 
 const DealDetail = (props) => {
   const imageXPos = new Animated.Value(0);
+  const width = Dimensions.get("window").width;
 
   const imagePanResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -23,18 +26,40 @@ const DealDetail = (props) => {
       imageXPos.setValue(gs.dx);
     },
     onPanResponderRelease: (evt, gs) => {
-      const width = Dimensions.get("window").width;
+      // const width = Dimensions.get("window").width;
       if (Math.abs(gs.dx) > width * 0.4) {
-        const direction = Math.sign(gs.dx)
+        const direction = Math.sign(gs.dx);
         // -1 for left, 1 for right
         Animated.timing(imageXPos, {
           toValue: direction * width,
           duration: 250,
-          useNativeDriver: false
+          useNativeDriver: false,
+        }).start(() => handleSwipe(-1 * direction));
+      } else {
+        Animated.spring(imageXPos, {
+          toValue: 0,
+          useNativeDriver: false,
         }).start();
       }
     },
   });
+
+  const handleSwipe = (indexDirection) => {
+    if (!deal[imageIndex + indexDirection]) {
+      Animated.spring(imageXPos, {
+        toValue: 0,
+        useNativeDriver: false,
+      }).start();
+      return;
+    }
+
+    setImageIndex((imageIndex) => imageIndex + indexDirection);
+    imageXPos.setValue(width);
+    Animated.spring(imageXPos, {
+      toValue: 0,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const [deal, setDeal] = useState();
   const [imageIndex, setImageIndex] = useState(0);
@@ -48,6 +73,10 @@ const DealDetail = (props) => {
 
     fetchData();
   }, []);
+
+  const openDealUrl = () => {
+    Linking.openURL(deal.url);
+  };
 
   return (
     <SafeAreaView style={styles.deal}>
@@ -79,6 +108,7 @@ const DealDetail = (props) => {
           </>
         )}
       </View>
+      <Button title="Buy this deal" onPress={openDealUrl} />
     </SafeAreaView>
   );
 };
@@ -91,6 +121,7 @@ const styles = StyleSheet.create({
   deal: {
     marginTop: 12,
     width: "100%",
+    maxWidth: 275,
     flex: 1,
     backgroundColor: "#fff",
   },
@@ -127,6 +158,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   backLink: {
+    marginLeft: 10,
     marginBottom: 10,
     color: "#22f",
   },
